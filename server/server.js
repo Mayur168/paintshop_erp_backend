@@ -1,0 +1,47 @@
+const dotenv = require('dotenv');
+const express = require('express');
+const cors = require('cors');
+const app = express();
+const port = 5000;
+const categoryRoute = require('./routes/category');
+const customerRoute = require('./routes/customer');
+const orderRoute = require('./routes/order');
+const orderDetailRoute = require('./routes/orderDetail');
+// const postTransactionDetailRoute = require('./routes/postTransactionDetail');
+const productRoute = require('./routes/product');
+const supplierRoute = require('./routes/supplier');
+const nongstRoute = require ('./routes/Nongst');
+const connectDB = require('./utils/db');
+const errorMiddleware = require('./middlewares/error-middleware');
+
+dotenv.config();
+
+// Apply CORS middleware before routes
+app.use(cors({
+  origin: 'http://localhost:8080', // Allow requests from your frontend origin
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'], // Specify allowed methods
+  allowedHeaders: ['Content-Type', 'Authorization'], // Specify allowed headers
+}));
+
+// Parse JSON request bodies
+app.use(express.json());
+
+// Define routes
+app.use('/api/category', categoryRoute);
+app.use('/api/customer', customerRoute);
+app.use('/api/order', orderRoute);
+app.use('/api/orderDetails', orderDetailRoute);
+// app.use('/api/postTransactionDetail', postTransactionDetailRoute);
+app.use('/api/product', productRoute);
+app.use('/api/supplier', supplierRoute);
+app.use('/api/nongstorder', nongstRoute);
+
+// Error handling middleware
+app.use(errorMiddleware);
+
+// Connect to database and start server
+connectDB().then(() => {
+  app.listen(port, () => {
+    console.log(`Example app listening on port ${port}`);
+  });
+});
