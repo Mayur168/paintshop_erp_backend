@@ -84,6 +84,9 @@ app.use(cors({
 
 // JSON parsing
 app.use(express.json());
+app.get("/", (req, res) => {
+  res.send("API is running");
+});
 
 // Routes
 app.use('/api/category', categoryRoute);
