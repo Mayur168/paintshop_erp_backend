@@ -18,13 +18,14 @@ dotenv.config();
 
 // Apply CORS middleware before routes
 app.use(cors({
-  origin: 'http://localhost:8080', // Allow requests from your frontend origin
+  origin: 'http://localhost:8080' || "*", // Allow requests from your frontend origin
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'], // Specify allowed methods
   allowedHeaders: ['Content-Type', 'Authorization'], // Specify allowed headers
 }));
 
 // Parse JSON request bodies
 app.use(express.json());
+
 
 // Define routes
 app.use('/api/category', categoryRoute);
@@ -38,10 +39,22 @@ app.use('/api/nongstorder', nongstRoute);
 
 // Error handling middleware
 app.use(errorMiddleware);
+// Your routes & middleware setup here...
 
-// Connect to database and start server
-connectDB().then(() => {
-  app.listen(port, () => {
-    console.log(`Example app listening on port ${port}`);
-  });
-});
+// Database connection
+connectDB();
+
+// Error middleware
+app.use(errorMiddleware);
+
+// Export the Express app for Vercel
+module.exports = app;
+
+// app.use(connectDB());
+// // Connect to database and start server
+// // connectDB().then(() => {
+// //   // app.listen(port, () => {
+// //   //   console.log(`Example app listening on port ${port}`);
+// //   // });
+// // });
+// module.exports = app;
