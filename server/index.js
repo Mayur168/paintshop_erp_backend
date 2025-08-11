@@ -59,48 +59,36 @@
 // // // });
 
 //const dotenv = require('dotenv');
+const dotenv = require('dotenv');
 const express = require('express');
 const cors = require('cors');
 const categoryRoute = require('./routes/category');
-const customerRoute = require('./routes/customer');
-const orderRoute = require('./routes/order');
-const orderDetailRoute = require('./routes/orderDetail');
-const productRoute = require('./routes/product');
-const supplierRoute = require('./routes/supplier');
-const nongstRoute = require('./routes/Nongst');
+// ... (other route imports)
 const connectDB = require('./utils/db');
 const errorMiddleware = require('./middlewares/error-middleware');
 
 dotenv.config();
 const app = express();
 
-// CORS
 app.use(cors({
   origin: '*',
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
   allowedHeaders: ['Content-Type', 'Authorization'],
 }));
 
-// JSON parsing
 app.use(express.json());
-app.get("/", (req, res) => {
-  res.send("API is running");
+app.get('/', (req, res) => {
+  res.send('API is running');
 });
 
 // Routes
 app.use('/api/category', categoryRoute);
-app.use('/api/customer', customerRoute);
-app.use('/api/order', orderRoute);
-app.use('/api/orderDetails', orderDetailRoute);
-app.use('/api/product', productRoute);
-app.use('/api/supplier', supplierRoute);
-app.use('/api/nongstorder', nongstRoute);
+// ... (other app.use statements)
 
-// Error handler
 app.use(errorMiddleware);
 
-// Connect to DB (non-blocking)
-connectDB().catch(err => console.error("Database connection error:", err));
+// Connect to DB asynchronously
+connectDB().catch(err => console.error('Database connection error:', err));
 
 module.exports = app;
 
